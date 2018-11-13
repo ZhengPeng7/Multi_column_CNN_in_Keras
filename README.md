@@ -11,7 +11,7 @@ Multi-column CNN is the crowd counting algorithm proposed in a CVPR 2016 paper [
 
 The data can be downloaded on [dropbox](<https://www.dropbox.com/s/fipgjqxl7uj8hd5/ShanghaiTech.zip?dl=0>) or [Baidu Disk](<http://pan.baidu.com/s/1nuAYslz>) can't be used directly without some preprocessing.
 
-Please refer to the preprocessing implemented in [this mcnn repository]((https://github.com/svishwa/crowdcount-mcnn#data-setup)) in pytorch.
+Please refer to the preprocessing implemented in [this mcnn repository](https://github.com/svishwa/crowdcount-mcnn#data-setup) in pytorch.
 
 
 
