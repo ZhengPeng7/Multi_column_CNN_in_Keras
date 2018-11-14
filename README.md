@@ -23,3 +23,18 @@ The data can be downloaded on [dropbox](<https://www.dropbox.com/s/fipgjqxl7uj8h
 
 
 
+## Results:
+
+> Some outputs after 200 epochs -- loss curves:![loss](images/loss.jpg)
+
++ Good one:
+
+![result_sample_good](images/result_sample_good.jpg)
+
++ Acceptable one:
+
+![result_sample_normal](images/result_sample_normal.jpg)
+
++ Bad one:
+
+![result_sample_bad](images/result_sample_bad.jpg)
