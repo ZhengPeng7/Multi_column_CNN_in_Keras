@@ -11,11 +11,15 @@ Multi-column CNN is the crowd counting algorithm proposed in a CVPR 2016 paper [
 
 The data can be downloaded on [dropbox](<https://www.dropbox.com/s/fipgjqxl7uj8hd5/ShanghaiTech.zip?dl=0>) or [Baidu Disk](<http://pan.baidu.com/s/1nuAYslz>) can't be used directly without some preprocessing.
 
-Please refer to the preprocessing implemented in [this mcnn repository](https://github.com/svishwa/crowdcount-mcnn#data-setup) in pytorch.
+1. Create directory `data/original` in the root path of this repository, then move the decompressed `ShanghaiTech` to it.
+
+2. Run the `create_gt_test_set_shtech.py` to generate the csv files for test which can be loaded as:
+
+   ![csv_sample](images/csv_sample.jpg)
+
+3. Run the `create_training_set_shtech.py` to generate selected images and csv files randomly for training and validation. in `formatted_trainval`.
+
+> These three python files in `data_preprocessing` are adapted from the original MATLAB version preprocessing implemented in [this mcnn repository](https://github.com/svishwa/crowdcount-mcnn#data-setup) in pytorch.
 
 
-
-## Result:
-
-![sample](images/sample.jpg)
 

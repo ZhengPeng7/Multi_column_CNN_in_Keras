@@ -10,8 +10,9 @@ def gen_imgPaths_and_labelPaths(dataset="B"):
     train_den_path = './data/formatted_trainval/shanghaitech_part_' + dataset + '_patches_9/train_den/'
     val_path = './data/formatted_trainval/shanghaitech_part_' + dataset + '_patches_9/val/'
     val_den_path = './data/formatted_trainval/shanghaitech_part_' + dataset + '_patches_9/val_den/'
-    img_path = './data/original/shanghaitech/part_' + dataset + '_final/test_data/images/'
-    den_path = './data/original/shanghaitech/part_' + dataset + '_final/test_data/ground_truth_csv/'
+    img_path = './data/original/ShanghaiTech/part_' + dataset + '/test_data/images/'
+    den_path = './data/original/ShanghaiTech/part_' + dataset + '/test_data/ground-truth_csv/'
+    print(img_path)
     train_paths = sorted([train_path + p for p in os.listdir(train_path)], key=lambda x: float(x[:-len('.jpg')].split('/')[-1].replace('_', '.')))
     train_labels = sorted([train_den_path + p for p in os.listdir(train_den_path)], key=lambda x: float(x[:-len('.jpg')].split('/')[-1].replace('_', '.')))
     validation_paths = sorted([val_path + p for p in os.listdir(val_path)], key=lambda x: float(x[:-len('.jpg')].split('/')[-1].replace('_', '.')))
@@ -22,14 +23,14 @@ def gen_imgPaths_and_labelPaths(dataset="B"):
     return train_paths, train_labels, validation_paths, validation_labels, test_paths, test_labels
 
 
-def generate_generator(img_paths, label_paths, batch_size=32, is_shuffle=True, img_flip=0):
+def generate_generator(img_paths, label_paths, batch_size=32, is_shuffle=False, img_flip=0):
     flag_continue = 0
     idx_total = 0
     img_paths = np.squeeze(img_paths).tolist() if isinstance(img_paths, np.ndarray) else img_paths
     label_paths = np.squeeze(label_paths).tolist() if isinstance(label_paths, np.ndarray) else label_paths
     if is_shuffle:
         paths_shuffled = shuffle(np.hstack([np.asarray(img_paths).reshape(-1, 1), np.asarray(label_paths).reshape(-1, 1)]))
-        img_paths, label_paths = paths_shuffled[:, 0].tolist(), paths_shuffled[:, 1].tolist()
+        img_paths, label_paths = np.squeeze(paths_shuffled[:, 0]).tolist(), np.squeeze(paths_shuffled[:, 1]).tolist()
     data_len = len(label_paths)
     while True:
         if not flag_continue:
@@ -48,10 +49,10 @@ def generate_generator(img_paths, label_paths, batch_size=32, is_shuffle=True, i
             img = (cv2.imread(img_paths[idx_total], 0) - 127.5) / 128
             density_map = np.loadtxt(label_paths[idx_total], delimiter=',')
             stride = 4
-            density_map_quarter = np.zeros(((np.asarray(density_map.shape)//stride).tolist()))
-            for r in range(0, density_map_quarter.shape[0]-stride, stride):
-                for c in range(0, density_map_quarter.shape[1]-stride, stride):
-                    density_map_quarter[r, c] = np.sum(density_map[r:r+stride, c:c+stride])
+            density_map_quarter = np.zeros((np.asarray(density_map.shape).astype(int)//stride).tolist())
+            for r in range(density_map_quarter.shape[0]):
+                for c in range(density_map_quarter.shape[1]):
+                    density_map_quarter[r, c] = np.sum(density_map[r*stride:(r+1)*stride, c*stride:(c+1)*stride])
             x.append(img.reshape(*img.shape, 1))
             y.append(density_map_quarter.reshape(*density_map_quarter.shape, 1))
             if img_flip:
@@ -63,8 +64,8 @@ def generate_generator(img_paths, label_paths, batch_size=32, is_shuffle=True, i
 
 
 def monitor_mae(labels, preds):
-    return abs(K.sum(labels) - K.sum(preds))
+    return K.sum(K.abs(labels - preds)) / 1
 
 
 def monitor_mse(labels, preds):
-    return (K.sum(labels) - K.sum(preds)) * (K.sum(labels) - K.sum(preds))
+    return K.sum(K.square(labels - preds)) / 1
