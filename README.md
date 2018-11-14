@@ -19,7 +19,7 @@ The data can be downloaded on [dropbox](<https://www.dropbox.com/s/fipgjqxl7uj8h
 
 3. Run the `create_training_set_shtech.py` to generate selected images and csv files randomly for training and validation. in `formatted_trainval`.
 
-> These three python files in `data_preprocessing` are adapted from the original MATLAB version preprocessing implemented in [this mcnn repository](https://github.com/svishwa/crowdcount-mcnn#data-setup) in pytorch.
+> These three python files in `data_preparation` are adapted from the original MATLAB version preprocessing implemented in [this mcnn repository](https://github.com/svishwa/crowdcount-mcnn#data-setup) in pytorch.
 
 
 
